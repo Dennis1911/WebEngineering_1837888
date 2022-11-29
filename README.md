@@ -3,3 +3,4 @@
 Setup:
 https://www.youtube.com/watch?v=rA2zUZqOYL4&ab_channel=SkillBakeryStudio
 
+npm run serve (in web-eng-site)
