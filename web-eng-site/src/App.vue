@@ -31,7 +31,7 @@ export default{
   name: "app",
   data (){
     return {
-      api_key: ""
+      api_key: 'c3c119d9c762e62a38a494704228fc32'
     }
   },
   methods: {   
@@ -39,7 +39,8 @@ export default{
    var element = document.body;
    element.classList.toggle("dark-mode");
    
-    }
+    },
+  
   }
 }
   
