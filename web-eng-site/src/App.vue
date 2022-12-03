@@ -26,10 +26,11 @@
         />
       </div>
       <!-- Location of the Weather -->
-      <div class="weatherFeature" v-if="(typeof weather.main != 'undefined')">
+      <!-- The Weather Information will only be shown, if a search has been done -->
+      <div class="weatherFeature" v-if="(typeof weather.main != 'undefined')"> 
         <div class="weatherLocation-box">
           <div class="location">{{weather.name}}, {{weather.sys.country}}</div>
-          <div class="date">19.11.2001</div>
+          <div class="date">{{getDate()}}</div>
         </div>
         <!-- Forecast data -->
         <div class="wheatherForecast-box">
@@ -54,7 +55,7 @@ export default{
       query: '',
       url_weatherForecast: 'https://api.openweathermap.org/data/2.5/',
       weather: {}
-
+      
     }
   },
   methods: {   
@@ -74,6 +75,11 @@ export default{
     },
     setResults(results){
       this.weather = results;
+    },
+    getDate(){
+      let d = new Date();
+      let dt = d.toLocaleDateString()
+      return `${dt}`;
     }
   }
 }
