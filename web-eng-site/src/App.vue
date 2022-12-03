@@ -25,6 +25,7 @@
           v-on:keypress="getWeather"
         />
       </div>
+      {{weather}}
       <!-- Location of the Weather -->
       <!-- The Weather Information will only be shown, if a search has been done -->
       <div class="weatherFeature" v-if="(typeof weather.main != 'undefined')"> 
@@ -35,7 +36,7 @@
         <!-- Forecast data -->
         <div class="wheatherForecast-box">
           <div class="temp">9°</div>
-          <div class="wheater">{{weather.weather[0].main}}</div>
+          <div class="wheater">{{getWeatherOfDay(1)}}</div>
         </div>
     </div>
     </main>
@@ -53,7 +54,7 @@ export default{
     return {
       api_key: 'c3c119d9c762e62a38a494704228fc32',
       query: '',
-      url_weatherForecast: 'https://api.openweathermap.org/data/2.5/',
+      url_weatherForecast: 'https://api.openweathermap.org/data/2.5/forecast?q=',
       weather: {}
       
     }
@@ -67,7 +68,7 @@ export default{
     // get weather from openweathermap.org
   getWeather (e) {
       if (e.key == "Enter") {
-        fetch(`${this.url_weatherForecast}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+        fetch(`${this.url_weatherForecast}${this.query}&units=metric&APPID=${this.api_key}`)
           .then(res => {
             return res.json();
           }).then(this.setResults);
@@ -75,6 +76,32 @@ export default{
     },
     setResults(results){
       this.weather = results;
+      showWeatherData(weather);
+    },
+    showWeatherData(weather) {
+    otherDayForcast = ''
+    weather.daily.forEach((day, idx) => {
+        if(idx == 0){
+            currentTempEl.innerHTML = `
+            <img src="http://openweathermap.org/img/wn//${day.weather[0].icon}@4x.png" alt="weather icon" class="w-icon">
+            <div class="other">
+                <div class="day">{{getDate()}}</div>
+                <div class="temp">Night - ${day.temp.night}&#176;C</div>
+                <div class="temp">Day - ${day.temp.day}&#176;C</div>
+            </div>
+            `}
+        else{
+          otherDayForcast += `
+          <div class="weather-forecast-item">
+              <div class="day">{{getDate()}}</div>
+              <img src="http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="weather icon" class="w-icon">
+              <div class="temp">Night - ${day.temp.night}&#176;C</div>
+              <div class="temp">Day - ${day.temp.day}&#176;C</div>
+          </div>
+          
+          `
+        }
+      })
     },
     getDate(){
       let d = new Date();
