@@ -4,17 +4,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Focus</title>
 </head>
-<body>
-  <div id="app"> 
-    <div class="menübar">
-      <!-- Darkmode button -->
-      <button  v-on:click="Funktion()" class="dbtn"><img src="./assets/Moon.png"></button> 
-      <a class="websiteName" style="float: left; font-size: 34px; font-weight: 800;" >FOCUS</a>
-      <a v-on:click="activateForecast()">WEATHER</a>
-      <a v-on:click="activateSpotify()">SPOTIFY</a>
-      <a v-on:click="activateTimer()" class="active" >TIMER</a>      
+<body class="pagegridcontainer">
+  <div id="app">
+    <div class="pagegridnavigation">
+    <div class="flexboxnav">
+      <!-- Darkmode button --> 
+      <a class="websiteName" style="justify-content: flex-start; float: left; font-size: 34px; font-weight: 800;" >FOCUS</a>
+      <a v-on:click="activateForecast()" id="weatherNav" >WEATHER</a>
+      <a v-on:click="activateSpotify()" id="spotifyNav">SPOTIFY</a>
+      <a v-on:click="activateTimer()" id="timerNav" >TIMER</a>
+      <button  v-on:click="Funktion()" class="dbtn"><img src="./assets/Moon.png"></button>      
     </div>
-    <main>
+  </div>
+    <main class="pagegridcontent">
 
       <div id="weatherForecastBox" class="weatherForecastBox">
       <!-- searchbar -->
@@ -35,8 +37,12 @@
 
     <!-- Spotify Api -->
 
-    <div id="spotifyBox" class="spotifyBox">
-        <a>Spotify</a>
+    <div id="spotifyBox" class="flexspotify">
+      <iframe class="showSpotify" style="border-radius:12px" 
+       src="https://open.spotify.com/embed/playlist/6gOj4tqJqJ6Y9JLdKUMbrI?utm_source=generator&theme=0"
+       width="60%" height="380" frameBorder="0" allowfullscreen=""
+       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+      </iframe>
     </div>
 
     </main>
@@ -55,7 +61,12 @@ export default{
       api_key: 'c3c119d9c762e62a38a494704228fc32',
       query: '',
       url_weatherForecast: 'https://api.openweathermap.org/data/2.5/',
-      weather: {}
+      weather: {},
+      // Spotify:
+      spotify_user_id: "guntd", // client_id:"51b2f1e4f8d5454b9a7067cd85325d77", // client secret: "331967fc072f4028a79a815ea57a0b68",
+      refresh_token:"",
+      base_64: "NjYwYzQwNzk1ZjAwNDM2MjkyMGE2NmZhMzZlMTg3MmU6MzZkMzgyZTVhMGVhNGJkNGFkYTViNmVlZjg0MzViMWE="
+
     }
   },
   methods: {   
@@ -67,6 +78,8 @@ export default{
   activateForecast() {
     document.getElementById('spotifyBox').style.display = "none";
     document.getElementById('weatherForecastBox').style.display = "block";
+    document.getElementById('weatherNav').style.backgroundColor = "#4d4b4b"
+    document.getElementById('spotifyNav').style.backgroundColor = "#282828"
   },
     // get weather from openweathermap.org
   getWeather (e) {
@@ -77,6 +90,7 @@ export default{
           }).then(this.setResults);
       }
     },
+    // 
     setWeatherData(response){
       var tableheader = "<table> <tr>";
       tableheader += "<th>Time</th><th>Temperatur</th><th>Icon</th></tr>";
@@ -102,9 +116,12 @@ export default{
     },
     // Spotify Js
     activateSpotify() {
-    document.getElementById('spotifyBox').style.display = "block";
-    document.getElementById('weatherForecastBox').style.display = "none";
-    console.log("weg mit Wetter");
+      console.log("in Aktivate");
+      document.getElementById('spotifyBox').style.display = "block";
+      document.getElementById('spotifyNav').style.backgroundColor = "#4d4b4b"
+      document.getElementById('weatherForecastBox').style.display = "none";
+      document.getElementById('weatherNav').style.backgroundColor = "#282828"
+      console.log("Hide WeatherForecast");
   }
   }
   
@@ -123,13 +140,31 @@ body {
   box-sizing: border-box;
 }
 
+/* Responsive Design */
+
+.pagegridcontainer {display:grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto;
+    justify-items: stretch;
+    align-items: stretch;
+  }
+
+  .pagegridnavigation {grid-area: 8/1/1/1/1}
+  .pagegridcontent  {grid-area: 1/4/1}
+
+  .flexboxnav, .flexboxcontent {display: flex; flex-flow: row wrap;}
+  .flexboxnav,.flexboxcontent {flex-flow: row wrap;}
+  .weatherForecastBox {justify-content: space-between; align-items: stretch;}
+  .flexboxnav {justify-content: flex-end;}
+  .flexspotify {margin: auto; flex-flow: column;}
+
 /*container*/
-.menübar{ 
+.flexboxnav{ 
 	overflow: hidden;
 	background-color: #282828;
 }
 
-.menübar a{
+.flexboxnav a{
   display: flex;
   justify-content: space-around;
   text-decoration: none;
@@ -137,17 +172,17 @@ body {
 	color: #ffffff;
 	align-items: center;
   min-height: 40px;
-	padding: 35px 20px;
+	padding: 40px 20px;
 	font-size: 20px;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
 
-.menübar a:hover {
+.flexboxnav a:hover {
 	background-color: #4d4b4b;
 }
 
-.menübar a.active {
+.flexboxnav a.active {
   background-color: #4d4b4b;
   color: rgb(255, 255, 255);
 }
@@ -226,8 +261,16 @@ body {
 
 /* Spotify Css */
 
-.spotifyBox {
+.flexspotify {
     display: none;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+  }
+
+  .showSpotify {
+    margin-left: auto;
+    margin-right: auto;
   }
 /* Nächste Schritte: 
 - Wetter App nur wenn gefragt und nur die Mittagstemp.
