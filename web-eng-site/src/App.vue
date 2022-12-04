@@ -28,19 +28,6 @@
       <div  id="showForecast">
         <div class="showForecast" id="showForecastData"></div>
       </div>
-      <!-- Location of the Weather -->
-      <!-- The Weather Information will only be shown, if a search has been done -->
-      <!-- <div class="weatherFeature" v-if="(typeof weather.list != 'undefined')"> 
-        <div class="weatherLocation-box"> -->
-          <!-- <div class="location">{{weather.}}, {{weather.sys.country}}</div> -->
-          <!-- <div class="date">{{getDate()}}</div>
-        </div> -->
-        <!-- Forecast data -->
-        <!-- <div class="wheatherForecast-box">
-          <div class="temp">{{temps[0]}}</div>
-          <div class="wheater">{{dates[0]}}</div> -->
-        <!-- </div> -->
-    <!-- </div> -->
     </main>
   </div>
 </body>
@@ -57,10 +44,7 @@ export default{
       api_key: 'c3c119d9c762e62a38a494704228fc32',
       query: '',
       url_weatherForecast: 'https://api.openweathermap.org/data/2.5/',
-      weather: {},
-      temps: [],
-      dates: []
-      
+      weather: {}
     }
   },
   methods: {   
@@ -78,7 +62,7 @@ export default{
           }).then(this.setResults);
       }
     },
-    setTemps(response){
+    setWeatherData(response){
       var tableheader = "<table> <tr>";
       tableheader += "<th>Time</th><th>Temperatur</th><th>Icon</th></tr>";
       let tabletext = "";
@@ -87,45 +71,20 @@ export default{
       for(var i=0; i < len; i++){
         let obj = Object.values(response.list)[i];
         tabletext += "<tr><td>" + obj.dt_txt + "</td>" + "<td>" + obj.main.temp + "</td><td>" + "<img src=\"http://openweathermap.org/img/wn/" + obj.weather[0].icon + "@2x.png\">" + "</td></tr>";
-        let temp = Object.values(response.list)[i].main.temp;
-        let time = Object.values(response.list)[i].dt_txt;
-        this.temps.push(temp);
-        this.dates.push(time);
   }
     let tableclosing = "</table>";
     let fulltext = tableheader + tabletext + tableclosing;
     document.getElementById('showForecast').innerHTML = fulltext;
-    console.log(this.temps)
-    console.log(this.dates)
     },
     setResults(results){
       this.weather = results;
-      this.setTemps(results);
-      this.getData(results);
+      this.setWeatherData(results);
     },
     getDate(){
       let d = new Date();
       let dt = d.toLocaleDateString()
       return `${dt}`;
     }
-  //   getData(data){
-  //   this.items = data;
-  //     for(var i = 0; i < this.items.list.length; i++){
-  //       this.dates = this.items.list[i].dt_txt.substring(10);
-  //       this.temps = this.items.list[i].main;
-  //       //if 12 o'clock middat is found
-  //       // arraycontainsMidday = (this.dates.indexOf("12:00:00") > -1);
-  //     }
-
-  //     for(var j = 0; j < this.items.list.length; j++){
-  //       this.temps = this.items.list[j].main.temp;
-  //       if (this.dates.indexOf("12:00:00")) {
-  //         console.log(this.temps);  
-  //       }
-        
-  //     }
-    
-  // }
   }
 }
   
@@ -213,43 +172,12 @@ body {
     background-image: linear-gradient(to bottom, rgba(0,0,0,0.05),rgba(0,0,0,0.65));
   }
 
-  .weatherLocation-box .location {
-    color: #ffffff;
-    font-size: 28;
-    font-weight: 400;
-    text-align: center;
-    padding-top: 4%;
-  }
-
-  .weatherLocation-box .date {
-    color: #ffffff;
-    font-size: 8;
-    font-weight: 200;
-    text-align: center;
-  }
-
-  .wheatherForecast-box {
-    text-align: center;
-  }
-
-  .wheatherForecast-box .temp{
-    padding: 10px 25px;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 400;
-  }
-
-  .wheatherForecast-box .weather {
-    padding: 10px 25px;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 400;
-  }
-  
   .search-box .search-bar{
     align-items: center;
     padding: 15px;
   }
+
+/* Forecast CSS */
 
   .showForecast {
     right: 50%
@@ -270,7 +198,7 @@ body {
     border-spacing: 0 15px;
   }
 /* Nächste Schritte: 
-- Wetter App + Einfach 5 icons anzeigen. Egal wie, egal wo
+- Wetter App nur wenn gefragt und nur die Mittagstemp.
 - Nur noch Icons und die richtige Anfrage, bzw. die richtigen Daten auswerten
 - Spotify Aufgabe
 -
