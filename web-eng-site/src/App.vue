@@ -7,13 +7,12 @@
 <body class="pagegridcontainer">
   <div id="app">
     <div class="pagegridnavigation">
-    <div class="flexboxnav">
+    <div class="flexboxnav" id="flexboxnavDarkMode">
       <!-- Darkmode button --> 
-      <a class="websiteName" style="justify-content: flex-start; float: left; font-size: 34px; font-weight: 800;" >FOCUS</a>
+      <a class="websiteName" style="margin-right:auto; justify-content: flex-start; float: left; font-size: 34px; font-weight: 800;" >FOCUS</a>
       <a v-on:click="activateForecast()" id="weatherNav" >WEATHER</a>
       <a v-on:click="activateSpotify()" id="spotifyNav">SPOTIFY</a>
       <a v-on:click="activateTimer()" id="timerNav" >TIMER</a>
-      <button  v-on:click="Funktion()" class="dbtn"><img src="./assets/Moon.png"></button>      
     </div>
   </div>
     <main class="pagegridcontent">
@@ -40,7 +39,7 @@
     <div id="spotifyBox" class="flexspotify">
       <iframe class="showSpotify" style="border-radius:12px" 
        src="https://open.spotify.com/embed/playlist/6gOj4tqJqJ6Y9JLdKUMbrI?utm_source=generator&theme=0"
-       width="60%" height="380" frameBorder="0" allowfullscreen=""
+       width="60%" height="380" frameBorder="0" allowfullscreen="" justify-content="center" align-items="center"
        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
       </iframe>
     </div>
@@ -69,12 +68,7 @@ export default{
 
     }
   },
-  methods: {   
-  // Function for the dark mode
-  Funktion() {
-   var element = document.body;
-   element.classList.toggle("dark-mode");
-    },
+  methods: { 
   activateForecast() {
     document.getElementById('spotifyBox').style.display = "none";
     document.getElementById('weatherForecastBox').style.display = "block";
@@ -99,7 +93,7 @@ export default{
       console.log(len);
       for(var i=0; i < len; i++){
         let obj = Object.values(response.list)[i];
-        tabletext += "<tr><td>" + obj.dt_txt + "</td>" + "<td>" + obj.main.temp + "</td><td>" + "<img src=\"http://openweathermap.org/img/wn/" + obj.weather[0].icon + "@2x.png\">" + "</td></tr>";
+        tabletext += "<tr><td>" + obj.dt_txt + "</td>" + "<td>" + obj.main.temp + "°C" + "</td><td>" + "<img src=\"http://openweathermap.org/img/wn/" + obj.weather[0].icon + "@2x.png\">" + "</td></tr>";
   }
     let tableclosing = "</table>";
     let fulltext = tableheader + tabletext + tableclosing;
@@ -147,16 +141,17 @@ body {
     grid-template-rows: auto;
     justify-items: stretch;
     align-items: stretch;
+    row-gap: 20px;
   }
 
-  .pagegridnavigation {grid-area: 8/1/1/1/1}
-  .pagegridcontent  {grid-area: 1/4/1}
+  .pagegridnavigation {grid-area: 2 / 1/ span 1 / span 1}
+  .pagegridcontent  {grid-area: 3 / 1 / span 1 / span 1}
 
   .flexboxnav, .flexboxcontent {display: flex; flex-flow: row wrap;}
-  .flexboxnav,.flexboxcontent {flex-flow: row wrap;}
+  .flexboxnav,.flexboxcontent {justify-content: space-between; align-items: center;}
   .weatherForecastBox {justify-content: space-between; align-items: stretch;}
   .flexboxnav {justify-content: flex-end;}
-  .flexspotify {margin: auto; flex-flow: column;}
+  .flexspotify {justify-content: center; margin: auto; flex-flow: column;}
 
 /*container*/
 .flexboxnav{ 
@@ -167,7 +162,7 @@ body {
 .flexboxnav a{
   display: flex;
   justify-content: space-around;
-  text-decoration: none;
+  text-align: center;
 	float: right;
 	color: #ffffff;
 	align-items: center;
@@ -198,20 +193,6 @@ body {
   body {
     background-color: #1d1c1c;
     color: rgb(226, 219, 219);
-  }
-
-  
-  .dark-mode {
-    background-color: white;
-    color: black;
-  }
-
-  .dbtn{
-    margin-top: 2%;
-    background: #282828;
-    border: none;
-    padding: 10px;
-    float: right;
   }
 
   /*Hintergrundbild*/
@@ -263,15 +244,29 @@ body {
 
 .flexspotify {
     display: none;
-    margin-left: auto;
-    margin-right: auto;
-    align-items: center;
   }
 
   .showSpotify {
     margin-left: auto;
     margin-right: auto;
   }
+
+  @media only screen and (min-width: 10px) {
+  .flexboxnav a{width:100%;}
+  .flexspotify {width:100%}
+  .weatherForecastBox {width:30%}
+  }
+  /* For small  tablets: 450-700  */
+  @media only screen and (min-width: 610px) {
+    .flexboxnav a{width:100%;}
+    .flexspotify {width:100%}
+    .weatherForecastBox {width:60%}
+  }
+  @media only screen and (min-width: 1000px) {
+    .flexboxnav a {width:10%;}
+    .flexspotify {width:100%}
+    .weatherForecastBox {width:100%}
+}
 /* Nächste Schritte: 
 - Wetter App nur wenn gefragt und nur die Mittagstemp.
 - Nur noch Icons und die richtige Anfrage, bzw. die richtigen Daten auswerten
