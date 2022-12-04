@@ -10,11 +10,13 @@
       <!-- Darkmode button -->
       <button  v-on:click="Funktion()" class="dbtn"><img src="./assets/Moon.png"></button> 
       <a class="websiteName" style="float: left; font-size: 34px; font-weight: 800;" >FOCUS</a>
-      <a>WEATHER</a>
-      <a>SPOTIFY</a>
-      <a class="active" >TIMER</a>      
+      <a v-on:click="activateForecast()">WEATHER</a>
+      <a v-on:click="activateSpotify()">SPOTIFY</a>
+      <a v-on:click="activateTimer()" class="active" >TIMER</a>      
     </div>
     <main>
+
+      <div id="weatherForecastBox" class="weatherForecastBox">
       <!-- searchbar -->
       <div class="search-box">
         <input 
@@ -24,10 +26,19 @@
           v-model="query"
           v-on:keypress="getWeather"
         />
+        <!-- Forecast table -->
       </div>
       <div  id="showForecast">
         <div class="showForecast" id="showForecastData"></div>
       </div>
+    </div>
+
+    <!-- Spotify Api -->
+
+    <div id="spotifyBox" class="spotifyBox">
+        <a>Spotify</a>
+    </div>
+
     </main>
   </div>
 </body>
@@ -53,6 +64,10 @@ export default{
    var element = document.body;
    element.classList.toggle("dark-mode");
     },
+  activateForecast() {
+    document.getElementById('spotifyBox').style.display = "none";
+    document.getElementById('weatherForecastBox').style.display = "block";
+  },
     // get weather from openweathermap.org
   getWeather (e) {
       if (e.key == "Enter") {
@@ -84,8 +99,16 @@ export default{
       let d = new Date();
       let dt = d.toLocaleDateString()
       return `${dt}`;
-    }
+    },
+    // Spotify Js
+    activateSpotify() {
+    document.getElementById('spotifyBox').style.display = "block";
+    document.getElementById('weatherForecastBox').style.display = "none";
+    console.log("weg mit Wetter");
   }
+  }
+  
+  
 }
   
 </script>
@@ -178,6 +201,9 @@ body {
   }
 
 /* Forecast CSS */
+  .weatherForecastBox {
+    display: none;
+  }
 
   .showForecast {
     right: 50%
@@ -196,6 +222,12 @@ body {
   table {
     border-collapse: separate;
     border-spacing: 0 15px;
+  }
+
+/* Spotify Css */
+
+.spotifyBox {
+    display: none;
   }
 /* Nächste Schritte: 
 - Wetter App nur wenn gefragt und nur die Mittagstemp.
