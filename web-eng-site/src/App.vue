@@ -59,7 +59,7 @@ export default{
     return {
       weatherforecastapi_key: 'c3c119d9c762e62a38a494704228fc32',
       query: '',
-      url_weatherForecast: 'http://localhost:3000/',
+      url_weatherForecast: 'https://api.openweathermap.org/data/2.5/',
       weather: {},
       // Spotify:
       spotify_user_id: "guntd", // client_id:"51b2f1e4f8d5454b9a7067cd85325d77", // client secret: "331967fc072f4028a79a815ea57a0b68",
@@ -267,11 +267,5 @@ body {
     .flexspotify {width:100%}
     .weatherForecastBox {width:100%}
 }
-/* Nächste Schritte: 
-- Wetter App nur wenn gefragt und nur die Mittagstemp.
-- Nur noch Icons und die richtige Anfrage, bzw. die richtigen Daten auswerten
-- Spotify Aufgabe
--
- */
 </style>
 
