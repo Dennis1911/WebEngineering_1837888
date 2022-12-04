@@ -57,9 +57,9 @@ export default{
   name: "app",
   data (){
     return {
-      api_key: 'c3c119d9c762e62a38a494704228fc32',
+      weatherforecastapi_key: 'c3c119d9c762e62a38a494704228fc32',
       query: '',
-      url_weatherForecast: 'https://api.openweathermap.org/data/2.5/',
+      url_weatherForecast: 'http://localhost:3000/',
       weather: {},
       // Spotify:
       spotify_user_id: "guntd", // client_id:"51b2f1e4f8d5454b9a7067cd85325d77", // client secret: "331967fc072f4028a79a815ea57a0b68",
@@ -78,7 +78,7 @@ export default{
     // get weather from openweathermap.org
   getWeather (e) {
       if (e.key == "Enter") {
-        fetch(`${this.url_weatherForecast}forecast?q=${this.query}&units=metric&APPID=${this.api_key}`)
+        fetch(`${this.url_weatherForecast}forecast?q=${this.query}&units=metric&APPID=${this.weatherforecastapi_key}`)
           .then(res => {
             return res.json();
           }).then(this.setResults);
