@@ -10,6 +10,7 @@ My Webpage was designed to help me study or code in peace. I worked on the follo
 
 With my website I can look up the weather for the next 5 days and know why I should stay inside and code.
 The Spotify API allows me to listen to my favourite songs while coding and with Vue JS one can create a single file Webpage.
+In future I want to add a Timer to learn with the pomodoro method (45min learning - 5min breaks).
 
 If you want to run the build:
 
