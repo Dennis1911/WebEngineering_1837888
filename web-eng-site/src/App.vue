@@ -25,19 +25,22 @@
           v-on:keypress="getWeather"
         />
       </div>
+      <div  id="showForecast">
+        <div class="showForecast" id="showForecastData"></div>
+      </div>
       <!-- Location of the Weather -->
       <!-- The Weather Information will only be shown, if a search has been done -->
-      <div class="weatherFeature" v-if="(typeof weather.main != 'undefined')"> 
-        <div class="weatherLocation-box">
-          <div class="location">{{weather.name}}, {{weather.sys.country}}</div>
-          <div class="date">{{getDate()}}</div>
-        </div>
+      <!-- <div class="weatherFeature" v-if="(typeof weather.list != 'undefined')"> 
+        <div class="weatherLocation-box"> -->
+          <!-- <div class="location">{{weather.}}, {{weather.sys.country}}</div> -->
+          <!-- <div class="date">{{getDate()}}</div>
+        </div> -->
         <!-- Forecast data -->
-        <div class="wheatherForecast-box">
-          <div class="temp">9°</div>
-          <div class="wheater">{{weather.weather[0].main}}</div>
-        </div>
-    </div>
+        <!-- <div class="wheatherForecast-box">
+          <div class="temp">{{temps[0]}}</div>
+          <div class="wheater">{{dates[0]}}</div> -->
+        <!-- </div> -->
+    <!-- </div> -->
     </main>
   </div>
 </body>
@@ -54,7 +57,9 @@ export default{
       api_key: 'c3c119d9c762e62a38a494704228fc32',
       query: '',
       url_weatherForecast: 'https://api.openweathermap.org/data/2.5/',
-      weather: {}
+      weather: {},
+      temps: [],
+      dates: []
       
     }
   },
@@ -67,20 +72,60 @@ export default{
     // get weather from openweathermap.org
   getWeather (e) {
       if (e.key == "Enter") {
-        fetch(`${this.url_weatherForecast}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+        fetch(`${this.url_weatherForecast}forecast?q=${this.query}&units=metric&APPID=${this.api_key}`)
           .then(res => {
             return res.json();
           }).then(this.setResults);
       }
     },
+    setTemps(response){
+      var tableheader = "<table> <tr>";
+      tableheader += "<th>Time</th><th>Temperatur</th><th>Icon</th></tr>";
+      let tabletext = "";
+      let len = Object.values(response.list).length;
+      console.log(len);
+      for(var i=0; i < len; i++){
+        let obj = Object.values(response.list)[i];
+        tabletext += "<tr><td>" + obj.dt_txt + "</td>" + "<td>" + obj.main.temp + "</td><td>" + "<img src=\"http://openweathermap.org/img/wn/" + obj.weather[0].icon + "@2x.png\">" + "</td></tr>";
+        let temp = Object.values(response.list)[i].main.temp;
+        let time = Object.values(response.list)[i].dt_txt;
+        this.temps.push(temp);
+        this.dates.push(time);
+  }
+    let tableclosing = "</table>";
+    let fulltext = tableheader + tabletext + tableclosing;
+    document.getElementById('showForecast').innerHTML = fulltext;
+    console.log(this.temps)
+    console.log(this.dates)
+    },
     setResults(results){
       this.weather = results;
+      this.setTemps(results);
+      this.getData(results);
     },
     getDate(){
       let d = new Date();
       let dt = d.toLocaleDateString()
       return `${dt}`;
     }
+  //   getData(data){
+  //   this.items = data;
+  //     for(var i = 0; i < this.items.list.length; i++){
+  //       this.dates = this.items.list[i].dt_txt.substring(10);
+  //       this.temps = this.items.list[i].main;
+  //       //if 12 o'clock middat is found
+  //       // arraycontainsMidday = (this.dates.indexOf("12:00:00") > -1);
+  //     }
+
+  //     for(var j = 0; j < this.items.list.length; j++){
+  //       this.temps = this.items.list[j].main.temp;
+  //       if (this.dates.indexOf("12:00:00")) {
+  //         console.log(this.temps);  
+  //       }
+        
+  //     }
+    
+  // }
   }
 }
   
@@ -204,6 +249,25 @@ body {
   .search-box .search-bar{
     align-items: center;
     padding: 15px;
+  }
+
+  .showForecast {
+    right: 50%
+  }
+
+  tr {
+    padding: 5px;
+  }
+
+  td {
+        width: 150px;
+        text-align: center;
+        padding: 5px;
+      }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0 15px;
   }
 /* Nächste Schritte: 
 - Wetter App + Einfach 5 icons anzeigen. Egal wie, egal wo
